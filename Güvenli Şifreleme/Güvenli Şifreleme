@@ -1,0 +1,91 @@
+//Şifreleme Programı
+
+using System;
+
+public class EncryptionProgram
+{
+    public static int Encrypt(int number)
+    {
+        // Basamakları al
+        int firstDigit = number / 1000;
+        int secondDigit = (number / 100) % 10;
+        int thirdDigit = (number / 10) % 10;
+        int fourthDigit = number % 10;
+
+        // Yer değiştirme işlemi
+        int encryptedNumber = (thirdDigit * 1000) + (fourthDigit * 100) + (firstDigit * 10) + secondDigit;
+
+        // Her basamağı 7 ile toplama işlemi
+        int sum = (encryptedNumber / 1000) + ((encryptedNumber / 100) % 10) + ((encryptedNumber / 10) % 10) + (encryptedNumber % 10);
+        int encryptedSum = (sum % 10 == 0) ? 10 : sum % 10; // 10'luk sistemdeki eşiti
+
+        // Şifrelenmiş sayıyı oluştur
+        int encryptedResult = (encryptedNumber * 10) + encryptedSum;
+
+        return encryptedResult;
+    }
+
+    public static void Main(string[] args)
+    {
+        if (args.Length > 0)
+        {
+            int number = int.Parse(args[0]);
+            int encryptedNumber = Encrypt(number);
+            Console.WriteLine("Şifrelenmiş veri: " + encryptedNumber);
+        }
+        else
+        {
+            Console.WriteLine("Dört basamaklı bir sayıyı argüman olarak giriniz.");
+        }
+    }
+}
+
+//Şifre Çözme Programı
+
+using System;
+
+public class DecryptionProgram
+{
+    public static int Decrypt(int encryptedNumber)
+    {
+        // Yer değiştirme işlemi
+        int firstDigit = (encryptedNumber / 1000) % 10;
+        int secondDigit = encryptedNumber % 10;
+        int thirdDigit = (encryptedNumber / 100) % 10;
+        int fourthDigit = (encryptedNumber / 10) % 10;
+
+        // Her basamağı 7 ile toplama işlemi
+        int sum = (encryptedNumber / 10) % 10;
+        int decryptedSum = (sum % 10 == 0) ? 10 : sum % 10; // 10'luk sistemdeki eşiti
+
+        // Şifrelenmiş sayının eski halini oluştur
+        int decryptedNumber = (thirdDigit * 1000) + (fourthDigit * 100) + (firstDigit * 10) + secondDigit;
+
+        if (decryptedSum == (decryptedNumber / 1000) + ((decryptedNumber / 100) % 10) + ((decryptedNumber / 10) % 10) + (decryptedNumber % 10))
+        {
+            return decryptedNumber;
+        }
+        else
+        {
+            Console.WriteLine("Geçersiz şifrelenmiş veri!");
+            return -1; // Hata durumunda -1 döndür
+        }
+    }
+
+    public static void Main(string[] args)
+    {
+        if (args.Length > 0)
+        {
+            int encryptedNumber = int.Parse(args[0]);
+            int decryptedNumber = Decrypt(encryptedNumber);
+            if (decryptedNumber != -1)
+            {
+                Console.WriteLine("Çözülmüş veri: " + decryptedNumber);
+            }
+        }
+        else
+        {
+            Console.WriteLine("Şifrelenmiş bir dört basamaklı sayıyı argüman olarak giriniz.");
+        }
+    }
+}
